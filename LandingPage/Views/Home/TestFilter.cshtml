@@ -1,0 +1,221 @@
+﻿@using LandingPage.Helpers
+@model LandingPage.Models.Filtre_Multiple
+
+@{
+    ViewData["Title"] = "Test Filter";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<!-- ✅ Centralized filter partial with only PceId, Jour, Semaine, and Période -->
+@await Html.PartialAsync("_FiltreMultiple", new Filtre_Multiple
+{
+    TypeFiltre = ViewBag.TypeFiltre ?? "mois",
+    TitrePage = "Test du Filtre",
+    LibelleFiltre = "Test des filtres personnalisés",
+    Controleur = "TestFilter",
+    Page = "ApplyFilter",
+    PageExporter = null,
+    Largeur_Modal = "30%",
+
+    PceId = ViewBag.PceId,
+    Mois = ViewBag.Mois,
+    Jour = ViewBag.Jour,
+
+    VisibleFilters = new List<string> { "pce_id", "mois", "jour" } // 👈 control visible filters here
+})
+
+
+
+<!-- Main content area -->
+<div class="container" style="margin-top: 20px; padding: 20px;">
+
+    <!-- Test Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-light border-0" style="border-radius: 15px 15px 0 0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-gear me-2 text-primary"></i>Résultats de Test du Filtre
+                        </h4>
+                        <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>Test effectué: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <div class="card-body" style="padding: 30px;">
+
+                    @if (ViewBag.TestData != null)
+                    {
+                        var testData = ViewBag.TestData as dynamic;
+
+                        <div class="alert alert-success border-0 shadow-sm" style="border-radius: 10px;">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill me-3 text-success" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-1">Filtre Test Appliqué avec Succès!</h5>
+                                    <p class="mb-0">Type de filtre: <strong>@testData.FilterType</strong></p>
+                                    <p class="mb-0 mt-1">Valeur: <strong>@testData.FilterValue</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Test Results Table -->
+                        <div class="table-responsive" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-list-check me-2"></i>Paramètre de Test
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-clipboard-data me-2"></i>Valeur
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-shield-check me-2"></i>Statut
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var result in testData.SampleResults)
+                                    {
+                                        <tr style="border-left: 4px solid @(result.Status == "OK" ? "#28a745" : result.Status == "Warning" ? "#ffc107" : "#dc3545");">
+                                            <td style="padding: 15px; font-weight: 600;">
+                                                <i class="bi bi-cpu me-2 text-info"></i>@result.Parameter
+                                            </td>
+                                            <td style="padding: 15px; font-weight: 500;">@result.Value</td>
+                                            <td style="padding: 15px;">
+                                                @if (result.Status == "OK")
+                                                {
+                                                    <span class="badge bg-success" style="padding: 8px 12px; border-radius: 20px;">
+                                                        <i class="bi bi-check-circle me-1"></i>OK
+                                                    </span>
+                                                }
+                                                else if (result.Status == "Warning")
+                                                {
+                                                    <span class="badge bg-warning text-dark" style="padding: 8px 12px; border-radius: 20px;">
+                                                        <i class="bi bi-exclamation-triangle me-1"></i>Attention
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger" style="padding: 8px 12px; border-radius: 20px;">
+                                                        <i class="bi bi-x-circle me-1"></i>Erreur
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info border-0 shadow-sm" style="border-radius: 10px;">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-info-circle-fill me-3 text-info" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-1">Prêt pour le Test de Filtre</h5>
+                                    <p class="mb-0">Sélectionnez un filtre pour commencer les tests. Utilisez le bouton "Modifier le filtre" pour configurer vos paramètres.</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    
+
+    <!-- Filter Information Section -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-gradient text-white border-0"
+                     style="background: linear-gradient(45deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Information sur les Filtres
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 25px;">
+                    <div class="row">
+                        <!-- N° Séquence -->
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(0, 123, 255, 0.1); border-radius: 8px; border-left: 4px solid #007bff;">
+                                <i class="bi bi-hash me-3 text-primary" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>N° Séquence</strong>
+                                    <br><small class="text-muted">Filtre par numéro de séquence (0-999999)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coulée -->
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(23, 162, 184, 0.1); border-radius: 8px; border-left: 4px solid #17a2b8;">
+                                <i class="bi bi-droplet me-3 text-info" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>Coulée</strong>
+                                    <br><small class="text-muted">Filtre par numéro de coulée (0-99999)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Jour -->
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(40, 167, 69, 0.1); border-radius: 8px; border-left: 4px solid #28a745;">
+                                <i class="bi bi-calendar-day me-3 text-success" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>Jour</strong>
+                                    <br><small class="text-muted">Filtre par date spécifique</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mois -->
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(255, 193, 7, 0.1); border-radius: 8px; border-left: 4px solid #ffc107;">
+                                <i class="bi bi-calendar-month me-3 text-warning" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>Mois</strong>
+                                    <br><small class="text-muted">Filtre par mois et année (ex. Avril 2025)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Période -->
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(108, 117, 125, 0.1); border-radius: 8px; border-left: 4px solid #6c757d;">
+                                <i class="bi bi-calendar-range me-3 text-secondary" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>Période</strong>
+                                    <br><small class="text-muted">Filtre entre deux dates (du... au...)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Année -->
+                        <div class="col-12">
+                            <div class="d-flex align-items-center p-3"
+                                 style="background: rgba(255, 99, 132, 0.1); border-radius: 8px; border-left: 4px solid #ff6384;">
+                                <i class="bi bi-calendar me-3 text-danger" style="font-size: 20px;"></i>
+                                <div>
+                                    <strong>Année</strong>
+                                    <br><small class="text-muted">Filtre basé uniquement sur l’année</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- .row -->
+                </div> <!-- .card-body -->
+            </div> <!-- .card -->
+        </div> <!-- .col-md-6 -->
+    </div> <!-- .row -->

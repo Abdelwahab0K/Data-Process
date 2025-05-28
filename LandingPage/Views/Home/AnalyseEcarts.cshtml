@@ -1,0 +1,334 @@
+﻿@model LandingPage.Models.Filtre_Multiple
+
+@{
+    ViewData["Title"] = "Analyse des Écarts";
+    Layout = "_DashboardLayout"; // ✅ Force it to use the dashboard layout
+}
+
+<!-- Include the improved filter partial view -->
+@await Html.PartialAsync("_FiltreMultiple", Model)
+
+<!-- Main content area with better spacing -->
+<div class="container" style="margin-top: 20px; padding: 20px;">
+    
+    <!-- Analysis Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-light border-0" style="border-radius: 15px 15px 0 0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-graph-up me-2 text-primary"></i>Résultats d'analyse
+                        </h4>
+                        <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>Dernière mise à jour: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+                
+
+                <div class="card-body" style="padding: 30px;">
+                    @if (ViewBag.AnalysisData != null)
+                    {
+                        <div class="alert alert-success border-0 shadow-sm" style="border-radius: 10px;">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill me-3 text-success" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-1">Données chargées avec succès!</h5>
+                                    <p class="mb-0">Type de filtre: <strong>@Model.TypeFiltre</strong></p>
+
+                                    @{
+                                        var data = ViewBag.AnalysisData as dynamic;
+                                    }
+
+                                    @if (data != null)
+                                    {
+                                        <p class="mb-0 mt-1">Données: <strong>@data.SampleData</strong></p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced table for analysis data -->
+                        <div class="table-responsive" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-gear me-2"></i>Paramètre
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-target me-2"></i>Valeur attendue
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-speedometer2 me-2"></i>Valeur réelle
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-arrow-left-right me-2"></i>Écart
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-percent me-2"></i>% Écart
+                                        </th>
+                                        <th style="border: none; padding: 15px;">
+                                            <i class="bi bi-flag me-2"></i>Statut
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-left: 4px solid #ffc107;">
+                                        <td style="padding: 15px; font-weight: 600;">
+                                            <i class="bi bi-thermometer-half me-2 text-warning"></i>Température
+                                        </td>
+                                        <td style="padding: 15px;">1500°C</td>
+                                        <td style="padding: 15px; font-weight: 500;">1485°C</td>
+                                        <td style="padding: 15px; color: #e74c3c; font-weight: 500;">-15°C</td>
+                                        <td style="padding: 15px;" class="text-warning fw-bold">-1.0%</td>
+                                        <td style="padding: 15px;">
+                                            <span class="badge bg-warning text-dark" style="padding: 8px 12px; border-radius: 20px;">
+                                                <i class="bi bi-exclamation-triangle me-1"></i>Attention
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-left: 4px solid #dc3545;">
+                                        <td style="padding: 15px; font-weight: 600;">
+                                            <i class="bi bi-speedometer me-2 text-danger"></i>Pression
+                                        </td>
+                                        <td style="padding: 15px;">2.5 bar</td>
+                                        <td style="padding: 15px; font-weight: 500;">2.3 bar</td>
+                                        <td style="padding: 15px; color: #e74c3c; font-weight: 500;">-0.2 bar</td>
+                                        <td style="padding: 15px;" class="text-danger fw-bold">-8.0%</td>
+                                        <td style="padding: 15px;">
+                                            <span class="badge bg-danger" style="padding: 8px 12px; border-radius: 20px;">
+                                                <i class="bi bi-x-circle me-1"></i>Critique
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-left: 4px solid #28a745;">
+                                        <td style="padding: 15px; font-weight: 600;">
+                                            <i class="bi bi-arrow-clockwise me-2 text-success"></i>Vitesse
+                                        </td>
+                                        <td style="padding: 15px;">1200 rpm</td>
+                                        <td style="padding: 15px; font-weight: 500;">1195 rpm</td>
+                                        <td style="padding: 15px; color: #28a745; font-weight: 500;">-5 rpm</td>
+                                        <td style="padding: 15px;" class="text-success fw-bold">-0.4%</td>
+                                        <td style="padding: 15px;">
+                                            <span class="badge bg-success" style="padding: 8px 12px; border-radius: 20px;">
+                                                <i class="bi bi-check-circle me-1"></i>OK
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <!-- Add more rows based on your actual data -->
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info border-0 shadow-sm" style="border-radius: 10px;">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-info-circle-fill me-3 text-info" style="font-size: 24px;"></i>
+                                <div>
+                                    <h5 class="mb-1">Aucune donnée disponible</h5>
+                                    <p class="mb-0">Aucune donnée n'a été trouvée pour les critères de filtre sélectionnés. Veuillez modifier vos critères de recherche.</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced analysis sections -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-gradient text-white border-0" style="background: linear-gradient(45deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>Graphique des écarts
+                    </h5>
+                </div>
+                <div class="card-body text-center" style="padding: 30px;">
+                    <!-- Chart placeholder -->
+                    <canvas id="ecartsChart" width="400" height="200" style="border-radius: 10px;"></canvas>
+                    <p class="text-muted mt-3 mb-0">
+                        <small><i class="bi bi-info-circle me-1"></i>Graphique des écarts par rapport aux valeurs attendues</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-gradient text-white border-0" style="background: linear-gradient(45deg, #28a745, #1e7e34); border-radius: 15px 15px 0 0;">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pie-chart me-2"></i>Statistiques de Conformité
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 30px;">
+                    <!-- Statistics content with better styling -->
+                    <div class="row text-center mb-4">
+                        <div class="col-4">
+                            <div class="stat-item" style="padding: 20px; border-radius: 10px; background: linear-gradient(135deg, #d4edda, #c3e6cb);">
+                                <h3 class="text-success mb-2" style="font-weight: 700; font-size: 2.5rem;">85%</h3>
+                                <small class="text-success fw-bold">
+                                    <i class="bi bi-check-circle me-1"></i>Conformité
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item" style="padding: 20px; border-radius: 10px; background: linear-gradient(135deg, #fff3cd, #ffeaa7);">
+                                <h3 class="text-warning mb-2" style="font-weight: 700; font-size: 2.5rem;">12%</h3>
+                                <small class="text-warning fw-bold">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Écarts mineurs
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item" style="padding: 20px; border-radius: 10px; background: linear-gradient(135deg, #f8d7da, #f1b0b7);">
+                                <h3 class="text-danger mb-2" style="font-weight: 700; font-size: 2.5rem;">3%</h3>
+                                <small class="text-danger fw-bold">
+                                    <i class="bi bi-x-circle me-1"></i>Écarts majeurs
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border-color: #dee2e6; margin: 25px 0;">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div style="padding: 15px; border-radius: 10px; background: rgba(23, 162, 184, 0.1);">
+                                <h5 class="text-info mb-1" style="font-weight: 600;">@DateTime.Now.ToString("dd/MM/yyyy")</h5>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-check me-1"></i>Dernière mise à jour
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div style="padding: 15px; border-radius: 10px; background: rgba(0, 123, 255, 0.1);">
+                                <h5 class="text-primary mb-1" style="font-weight: 600;">@Model.TypeFiltre.ToUpper()</h5>
+                                <small class="text-muted">
+                                    <i class="bi bi-funnel me-1"></i>Type de filtre actif
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional insights section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <div class="card-header bg-light border-0" style="border-radius: 15px 15px 0 0;">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightbulb me-2 text-warning"></i>Recommandations d'analyse
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 25px;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="recommendation-item p-3 h-100" style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; border-radius: 8px;">
+                                <h6 class="text-success mb-2">
+                                    <i class="bi bi-check-circle me-2"></i>Points positifs
+                                </h6>
+                                <p class="mb-0 small">La vitesse reste dans les paramètres acceptables avec un écart minimal de -0.4%.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="recommendation-item p-3 h-100" style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 8px;">
+                                <h6 class="text-warning mb-2">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>Attention requise
+                                </h6>
+                                <p class="mb-0 small">La température présente un écart de -1.0%. Surveillance recommandée.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="recommendation-item p-3 h-100" style="background: rgba(220, 53, 69, 0.1); border-left: 4px solid #dc3545; border-radius: 8px;">
+                                <h6 class="text-danger mb-2">
+                                    <i class="bi bi-exclamation-circle me-2"></i>Action immédiate
+                                </h6>
+                                <p class="mb-0 small">La pression affiche un écart critique de -8.0%. Intervention nécessaire.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize charts or other JavaScript components
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Analyse Écarts page loaded with filter:', '@Model.TypeFiltre');
+
+            // Example chart initialization (you can use Chart.js or any other library)
+            var canvas = document.getElementById('ecartsChart');
+            if (canvas) {
+                var ctx = canvas.getContext('2d');
+
+                // Create a simple placeholder chart
+                ctx.fillStyle = '#f8f9fa';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Add border
+                ctx.strokeStyle = '#dee2e6';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+                // Add text
+                ctx.fillStyle = '#6c757d';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Graphique des écarts', canvas.width/2, canvas.height/2 - 10);
+                ctx.font = '12px Arial';
+                ctx.fillText('En développement...', canvas.width/2, canvas.height/2 + 15);
+
+                // You can replace this with actual Chart.js implementation
+                // Example with Chart.js:
+                /*
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Température', 'Pression', 'Vitesse'],
+                        datasets: [{
+                            label: '% Écart',
+                            data: [-1.0, -8.0, -0.4],
+                            backgroundColor: ['#ffc107', '#dc3545', '#28a745']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                */
+            }
+
+            // Add smooth scroll behavior for better UX
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add loading animation for action buttons
+            document.querySelectorAll('.btn-action').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!this.classList.contains('btn-outline-primary')) {
+                        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Chargement...';
+                    }
+                });
+            });
+        });
+    </script>
+}

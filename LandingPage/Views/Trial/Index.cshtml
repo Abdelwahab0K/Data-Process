@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Test des Filtres";
+    var model = new LandingPage.Models.Filtre_Multiple
+    {
+        TypeFiltre = ViewBag.TypeFiltre,
+        PceId = ViewBag.PceId.ToString(),
+        Jour = ViewBag.Jour,
+        VisibleFilters = new List<string> { "pce_id", "jour" } // ✅ Add this line
+    };
+}
+@await Html.PartialAsync("_FiltreMultiple", model)
+    

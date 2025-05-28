@@ -1,0 +1,14 @@
+﻿# Ignore build and VS folders
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Logs and DB (optional)
+*.log
+*.db
+*.sqlite
+
+# Ignore user secrets and settings
+appsettings.Development.json

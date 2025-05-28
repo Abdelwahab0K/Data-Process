@@ -1,0 +1,361 @@
+﻿@{
+    ViewData["Title"] = "KPI Performance";
+    Layout = "_DashboardLayout";
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary-blue: #012B51;
+            --accent-gold: #F6B221;
+            --light-gray: #f5f5f5;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--primary-blue);
+        }
+
+        .page-header {
+            text-align: center;
+            margin: 2rem 0;
+            color: white;
+        }
+
+            .page-header h2 {
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            .page-header p {
+                opacity: 0.8;
+            }
+
+        .chart-section {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-box {
+            flex: 1 1 45%;
+            min-width: 300px;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .full-width-chart {
+            width: 100%;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-filter {
+            margin: 1.5rem auto;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .metric-search {
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+            .metric-search:focus {
+                outline: none;
+                border-color: var(--accent-gold);
+                box-shadow: 0 2px 10px rgba(246, 178, 33, 0.2);
+            }
+
+        .checkbox-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            background: #ffffff;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            color: #333;
+            font-size: 14px;
+            margin: 0.5rem auto 0;
+        }
+
+            .checkbox-list label {
+                display: flex;
+                align-items: center;
+                margin: 8px 0;
+                padding: 4px 0;
+                transition: all 0.2s ease;
+            }
+
+                .checkbox-list label:hover {
+                    background-color: #f5f7fa;
+                }
+
+            .checkbox-list input[type="checkbox"] {
+                margin-right: 10px;
+                accent-color: var(--accent-gold);
+            }
+
+        #noDataMsg {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: 600;
+            margin: 20px auto;
+            padding: 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 6px;
+            max-width: 500px;
+            display: none;
+        }
+
+        /* Canvas JS customization */
+        .canvasjs-chart-credit {
+            display: none !important;
+        }
+
+        .canvasjs-chart-toolbar {
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        }
+
+        /* Dashboard container */
+        .dashboard-container {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Match the data table styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+            .data-table th {
+                background-color: var(--primary-blue);
+                color: white;
+                padding: 12px 15px;
+                text-align: left;
+                font-weight: 500;
+            }
+
+            .data-table tr:nth-child(even) {
+                background-color: var(--light-gray);
+            }
+
+            .data-table td {
+                padding: 10px 15px;
+                border-bottom: 1px solid var(--border-color);
+            }
+    </style>
+}
+
+<div class="page-header">
+    <h2>KPI Performance</h2>
+    <p>Visualisation des performances clés via CanvasJS</p>
+</div>
+
+<div class="container">
+    <div class="dashboard-container">
+        <!-- Top: Line and Pie Charts -->
+        <div class="chart-section">
+            <div class="chart-box">
+                <div id="lineChart" style="height: 300px;"></div>
+            </div>
+            <div class="chart-box">
+                <div id="pieChart" style="height: 300px;"></div>
+            </div>
+        </div>
+
+        <!-- Metric filter -->
+        <div class="search-filter">
+            <input type="text" id="metricSearch" class="metric-search" placeholder="🔍 Rechercher des métriques...">
+            <div class="checkbox-list" id="metricCheckboxes"></div>
+        </div>
+
+        <!-- Bottom: Multi-metric chart -->
+        <div class="full-width-chart">
+            <div id="multiMetricChart" style="height: 400px;"></div>
+            <div id="noDataMsg">Aucune métrique sélectionnée. Veuillez cocher au moins une option.</div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script>
+        // Define 10 metrics with data and initial visibility false
+        const allMetrics = [
+            { name: "Total Visit", data: [{ x: new Date(2024, 3, 1), y: 320 }, { x: new Date(2024, 3, 2), y: 400 }, { x: new Date(2024, 3, 3), y: 380 }, { x: new Date(2024, 3, 4), y: 420 }], visible: false },
+            { name: "Unique Visit", data: [{ x: new Date(2024, 3, 1), y: 200 }, { x: new Date(2024, 3, 2), y: 230 }, { x: new Date(2024, 3, 3), y: 250 }, { x: new Date(2024, 3, 4), y: 270 }], visible: false },
+            { name: "Conversion Rate", data: [{ x: new Date(2024, 3, 1), y: 25 }, { x: new Date(2024, 3, 2), y: 30 }, { x: new Date(2024, 3, 3), y: 28 }, { x: new Date(2024, 3, 4), y: 33 }], visible: false },
+            { name: "Bounce Rate", data: [{ x: new Date(2024, 3, 1), y: 60 }, { x: new Date(2024, 3, 2), y: 55 }, { x: new Date(2024, 3, 3), y: 58 }, { x: new Date(2024, 3, 4), y: 62 }], visible: false },
+            { name: "Page Views", data: [{ x: new Date(2024, 3, 1), y: 800 }, { x: new Date(2024, 3, 2), y: 950 }, { x: new Date(2024, 3, 3), y: 1020 }, { x: new Date(2024, 3, 4), y: 980 }], visible: false },
+            { name: "Session Duration", data: [{ x: new Date(2024, 3, 1), y: 40 }, { x: new Date(2024, 3, 2), y: 42 }, { x: new Date(2024, 3, 3), y: 44 }, { x: new Date(2024, 3, 4), y: 47 }], visible: false },
+            { name: "Returning Users", data: [{ x: new Date(2024, 3, 1), y: 120 }, { x: new Date(2024, 3, 2), y: 130 }, { x: new Date(2024, 3, 3), y: 140 }, { x: new Date(2024, 3, 4), y: 160 }], visible: false },
+            { name: "Engagement Rate", data: [{ x: new Date(2024, 3, 1), y: 75 }, { x: new Date(2024, 3, 2), y: 80 }, { x: new Date(2024, 3, 3), y: 82 }, { x: new Date(2024, 3, 4), y: 79 }], visible: false },
+            { name: "Scroll Depth", data: [{ x: new Date(2024, 3, 1), y: 45 }, { x: new Date(2024, 3, 2), y: 55 }, { x: new Date(2024, 3, 3), y: 50 }, { x: new Date(2024, 3, 4), y: 58 }], visible: false },
+            { name: "Click Through Rate", data: [{ x: new Date(2024, 3, 1), y: 20 }, { x: new Date(2024, 3, 2), y: 25 }, { x: new Date(2024, 3, 3), y: 22 }, { x: new Date(2024, 3, 4), y: 28 }], visible: false }
+        ];
+
+        let chart;
+        const primaryBlue = "#012B51";
+        const accentGold = "#F6B221";
+
+        window.onload = function () {
+            // Define common chart style
+            CanvasJS.addColorSet("maghrebColors", [accentGold, "#34a0ff", "#5cb85c", "#d9534f", "#5bc0de", "#f0ad4e", "#9467bd", "#c7254e"]);
+
+            // Chart 1: Line/Bar
+            new CanvasJS.Chart("lineChart", {
+                colorSet: "maghrebColors",
+                animationEnabled: true,
+                title: {
+                    text: "Monthly Visits",
+                    fontColor: primaryBlue,
+                    fontFamily: "Arial, sans-serif",
+                    fontWeight: "normal"
+                },
+                axisY: {
+                    title: "Visits",
+                    titleFontColor: primaryBlue,
+                    lineColor: "#ccc"
+                },
+                axisX: {
+                    lineColor: "#ccc"
+                },
+                data: [{
+                    type: "column",
+                    dataPoints: [
+                        { label: "Jan", y: 1200 },
+                        { label: "Feb", y: 1500 },
+                        { label: "Mar", y: 1800 },
+                        { label: "Apr", y: 2200 }
+                    ]
+                }]
+            }).render();
+
+            // Chart 2: Pie
+            new CanvasJS.Chart("pieChart", {
+                colorSet: "maghrebColors",
+                animationEnabled: true,
+                title: {
+                    text: "User Type Distribution",
+                    fontColor: primaryBlue,
+                    fontFamily: "Arial, sans-serif",
+                    fontWeight: "normal"
+                },
+                data: [{
+                    type: "pie",
+                    showInLegend: true,
+                    toolTipContent: "{name}: {y}%",
+                    indexLabel: "{name} - {y}%",
+                    dataPoints: [
+                        { y: 40, name: "New Users", exploded: true },
+                        { y: 60, name: "Returning Users" }
+                    ]
+                }]
+            }).render();
+
+            // Chart 3: Multi-Metric Line
+            chart = new CanvasJS.Chart("multiMetricChart", {
+                animationEnabled: true,
+                theme: "light2",
+                colorSet: "maghrebColors",
+                title: {
+                    text: "Multi-Metric Trends",
+                    fontColor: primaryBlue,
+                    fontFamily: "Arial, sans-serif",
+                    fontWeight: "normal"
+                },
+                axisX: {
+                    valueFormatString: "DD MMM",
+                    lineColor: "#ccc"
+                },
+                axisY: {
+                    title: "Values",
+                    includeZero: true,
+                    titleFontColor: primaryBlue,
+                    lineColor: "#ccc"
+                },
+                legend: {
+                    cursor: "pointer",
+                    itemclick: toggleDataSeries
+                },
+                data: []
+            });
+
+            updateCheckboxList();
+            renderMultiMetricChart();
+        };
+
+        // Render dynamic checkbox list
+        function updateCheckboxList() {
+            const container = document.getElementById("metricCheckboxes");
+            container.innerHTML = "";
+            allMetrics.forEach((metric, index) => {
+                const label = document.createElement("label");
+                label.innerHTML = `<input type="checkbox" data-index="${index}"> ${metric.name}`;
+                container.appendChild(label);
+            });
+
+            // Checkbox change listener
+            container.querySelectorAll("input[type='checkbox']").forEach(cb => {
+                cb.addEventListener("change", function () {
+                    const index = parseInt(this.getAttribute("data-index"));
+                    allMetrics[index].visible = this.checked;
+                    renderMultiMetricChart();
+                });
+            });
+        }
+
+        // Render selected data
+        function renderMultiMetricChart() {
+            const selected = allMetrics.filter(m => m.visible);
+            chart.options.data = selected.map(m => ({
+                type: "line",
+                name: m.name,
+                showInLegend: true,
+                markerSize: 6,
+                dataPoints: m.data
+            }));
+            chart.render();
+
+            // Toggle warning
+            document.getElementById("noDataMsg").style.display = selected.length === 0 ? "block" : "none";
+        }
+
+        function toggleDataSeries(e) {
+            e.dataSeries.visible = !e.dataSeries.visible;
+            chart.render();
+        }
+
+        // Search bar filter
+        document.getElementById("metricSearch").addEventListener("input", function () {
+            const term = this.value.toLowerCase();
+            document.querySelectorAll("#metricCheckboxes label").forEach(label => {
+                label.style.display = label.textContent.toLowerCase().includes(term) ? "block" : "none";
+            });
+        });
+    </script>
+}

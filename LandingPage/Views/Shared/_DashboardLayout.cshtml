@@ -1,0 +1,481 @@
+﻿@* Views/Shared/_DashboardLayout.cshtml *@
+@{
+    Layout = null;
+    Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    Context.Response.Headers["Pragma"] = "no-cache";
+    Context.Response.Headers["Expires"] = "0";
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MAGHREB STEEL</title>
+    <link rel="icon" type="image/png" href="~/images/icon.png" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #012B51;
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .logo {
+            height: 35px;
+            width: auto;
+            margin-top: -6px;
+        }
+
+        .navbar {
+            background-color: #012B51;
+            border-bottom: 1px solid #ccc;
+            z-index: 1000;
+        }
+
+            .navbar .nav-link,
+            .navbar input,
+            .navbar .bi {
+                color: #f3f3f3;
+            }
+
+                .navbar .nav-link:hover {
+                    color: #F3AD20;
+                }
+
+                /* Active link styling - turns text yellow */
+                .navbar .nav-link.active {
+                    color: #F3AD20 !important;
+                }
+
+        .form-control::placeholder {
+            color: #ddd;
+        }
+
+        .search-box {
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .icon-buttons .bi {
+            font-size: 1.4rem;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .highlight {
+            background-color: yellow;
+            color: black;
+        }
+
+        .dropdown-menu {
+            background-color: #012B51;
+            border: none;
+        }
+
+        .dropdown-item {
+            color: white;
+        }
+
+            .dropdown-item:hover {
+                background-color: #0d4a7b;
+            }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: #0A1E31;
+            min-height: calc(100vh - 76px);
+            width: 250px;
+            position: fixed;
+            top: 76px;
+            left: 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            border-right: 1px solid #1a3a5c;
+            overflow-y: auto;
+        }
+
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid #1a3a5c;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+            .sidebar-nav .nav-item {
+                margin-bottom: 5px;
+            }
+
+            .sidebar-nav .nav-link {
+                color: #b8c5d1;
+                padding: 12px 20px;
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                border-left: 3px solid transparent;
+            }
+
+                .sidebar-nav .nav-link:hover {
+                    background-color: #1a3a5c;
+                    color: #F3AD20;
+                    border-left-color: #F3AD20;
+                }
+
+                .sidebar-nav .nav-link.active {
+                    background-color: #1a3a5c;
+                    color: #F3AD20;
+                    border-left-color: #F3AD20;
+                }
+
+                .sidebar-nav .nav-link i {
+                    width: 20px;
+                    margin-right: 10px;
+                    text-align: center;
+                }
+
+        /* Main content area */
+        .content-wrapper {
+            transition: margin-left 0.3s ease;
+            margin-left: 250px;
+            min-height: calc(100vh - 76px);
+        }
+
+            .content-wrapper.expanded {
+                margin-left: 0;
+            }
+
+        .main-content {
+            padding: 40px 20px;
+        }
+
+        /* Sidebar toggle button */
+        .sidebar-toggle {
+            position: fixed;
+            top: 90px;
+            left: 10px;
+            z-index: 1001;
+            background-color: #F3AD20;
+            color: #012B51;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+            .sidebar-toggle:hover {
+                background-color: #e09a1c;
+                transform: scale(1.1);
+            }
+
+            .sidebar-toggle.shifted {
+                left: 260px;
+            }
+
+        /* Responsive design */
+        @@media (max-width: 768px) {
+            .sidebar
+
+        {
+            transform: translateX(-100%);
+        }
+
+        .content-wrapper {
+            margin-left: 0;
+        }
+
+        .sidebar-toggle.shifted {
+            left: 10px;
+        }
+
+        }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            display: none;
+        }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid align-items-center">
+            <!-- Logo -->
+            <a class="navbar-brand me-4" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.png" alt="MAGHREB STEEL" class="logo" />
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-start">
+                <ul class="navbar-nav">
+                    <!-- Nav item for 'Suivi Process' -->
+                    <li class="nav-item mx-2">
+                        <a class="nav-link @(Context.Request.Path.StartsWithSegments("/Dashboard") ? "active" : "")"
+                           asp-controller="Dashboard" asp-action="Index">
+                            Suivi Process
+                        </a>
+                    </li>
+
+                    <!-- Nav item for 'KPI Performance' -->
+                    <li class="nav-item mx-2">
+                        <a class="nav-link
+                            @(
+                                ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+                                && ViewContext.RouteData.Values["action"]?.ToString() == "KPI"
+                                    ? "active"
+                                    : ""
+                            )"
+                           href="/Home/KPI">
+                            KPI Performance
+                        </a>
+                    </li>
+
+                    <!-- Nav item for 'Analyse Ecarts' -->
+                    <li class="nav-item mx-2">
+                        <a class="nav-link
+                            @(
+                                ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+                                && ViewContext.RouteData.Values["action"]?.ToString() == "AnalyseEcarts"
+                                    ? "active"
+                                    : ""
+                            )"
+                           asp-controller="Home" asp-action="AnalyseEcarts">
+                            Analyse Ecarts
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "TestFilter" ? "active" : "")"
+                           asp-controller="TestFilter" asp-action="Index">
+                            Test Filter
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Center Search Box -->
+            <form class="d-flex mx-auto search-box" onsubmit="event.preventDefault(); highlightSearch();">
+                <input class="form-control bg-dark border-0 text-white" type="search" placeholder="Recherche..." id="searchInput">
+            </form>
+
+            <!-- Right Icons -->
+            <div class="icon-buttons d-flex align-items-center ms-auto gap-3">
+                <i class="bi bi-gear-fill" title="Paramètres"></i>
+
+                <!-- Account Dropdown -->
+                <div class="dropdown">
+                    <i class="bi bi-person-circle dropdown-toggle" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="Mon Compte"></i>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                        <li>
+                            <span class="dropdown-item-text">
+                                Connecté en tant que @(User?.Identity?.IsAuthenticated == true ? User.Identity.Name : "Invité")
+                            </span>
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <form asp-controller="Home" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="dropdown-item">Se déconnecter</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="mb-0">Menu Principal</h5>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link @(Context.Request.Path.StartsWithSegments("/Dashboard") ? "active" : "")"
+                       asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "KPI" ? "active" : "")"
+                       href="/Home/KPI">
+                        <i class="bi bi-graph-up"></i>
+                        KPI Performance
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "AnalyseEcarts" ? "active" : "")"
+                       asp-controller="Home" asp-action="AnalyseEcarts">
+                        <i class="bi bi-bar-chart"></i>
+                        Analyse Écarts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "TestFilter" ? "active" : "")"
+                       asp-controller="TestFilter" asp-action="Index">
+                        <i class="bi bi-funnel"></i>
+                        Test Filter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-clipboard-data"></i>
+                        Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-people"></i>
+                        Utilisateurs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-gear"></i>
+                        Configuration
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper" id="contentWrapper">
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        function highlightSearch() {
+            const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+            const content = document.querySelector(".main-content");
+
+            if (!keyword) return;
+
+            // Reset previous highlights
+            content.innerHTML = content.innerHTML.replace(/<span class="highlight">(.*?)<\/span>/g, "$1");
+
+            try {
+                const regex = new RegExp(`(${keyword})`, "gi");
+                content.innerHTML = content.innerHTML.replace(regex, '<span class="highlight">$1</span>');
+            } catch (e) {
+                console.error("Invalid regex pattern:", e);
+            }
+        }
+
+        // Sidebar functionality
+        let sidebarOpen = true;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const contentWrapper = document.getElementById('contentWrapper');
+            const toggleButton = document.getElementById('sidebarToggle');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (window.innerWidth <= 768) {
+                // Mobile behavior
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                    overlay.classList.add('show');
+                } else {
+                    sidebar.classList.add('collapsed');
+                    overlay.classList.remove('show');
+                }
+            } else {
+                // Desktop behavior
+                if (sidebarOpen) {
+                    sidebar.classList.add('collapsed');
+                    contentWrapper.classList.add('expanded');
+                    toggleButton.classList.remove('shifted');
+                    sidebarOpen = false;
+                } else {
+                    sidebar.classList.remove('collapsed');
+                    contentWrapper.classList.remove('expanded');
+                    toggleButton.classList.add('shifted');
+                    sidebarOpen = true;
+                }
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            sidebar.classList.add('collapsed');
+            overlay.classList.remove('show');
+        }
+
+        // Initialize sidebar state
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('sidebarToggle');
+
+            if (window.innerWidth > 768) {
+                toggleButton.classList.add('shifted');
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const sidebar = document.getElementById('sidebar');
+                const contentWrapper = document.getElementById('contentWrapper');
+                const overlay = document.getElementById('sidebarOverlay');
+
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('collapsed');
+                    contentWrapper.classList.add('expanded');
+                    overlay.classList.remove('show');
+                } else {
+                    if (sidebarOpen) {
+                        sidebar.classList.remove('collapsed');
+                        contentWrapper.classList.remove('expanded');
+                    }
+                    overlay.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

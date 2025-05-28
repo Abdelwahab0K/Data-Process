@@ -1,0 +1,194 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Connexion - MAGHREB STEEL";
+}
+
+<!-- Section: Login Form with Particles Background -->
+<section id="loginSection" class="text-center text-lg-start position-relative" style="min-height: 100vh;">
+    <!-- Particles Background -->
+    <div id="particles-js" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <style>
+        #particles-js {
+            background-color: #012B51; /* Deep navy blue from landing page */
+        }
+
+        .rounded-t-5 {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        @@media (min-width: 992px) {
+            .rounded-tr-lg-0 {
+                border-top-right-radius: 0;
+            }
+
+            .rounded-bl-lg-5 {
+                border-bottom-left-radius: 0.5rem;
+            }
+        }
+
+        /* Center the login card vertically but slightly higher than center */
+        .login-card-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            padding-bottom: 0vh; /* This shifts the content upward */
+        }
+
+        .form-label {
+            color: #012B51;
+            font-weight: 600;
+        }
+
+        /* Custom styles to match landing page */
+        .card {
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .form-control {
+            border: 1px solid #e1e1e1;
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+            .form-control:focus {
+                border-color: #012B51;
+                box-shadow: 0 0 0 0.2rem rgba(1, 43, 81, 0.25);
+            }
+
+        .login-header {
+            color: #012B51;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-maghreb {
+            background-color: #F6B221; /* Gold accent color from landing page */
+            border: none;
+            color: #012B51;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-maghreb:hover {
+                background-color: #e8a919;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(246, 178, 33, 0.3);
+            }
+
+        .forgot-password {
+            color: #0069d9;
+            text-decoration: none;
+        }
+
+            .forgot-password:hover {
+                text-decoration: underline;
+            }
+
+        .tagline {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+    </style>
+
+    <div class="container login-card-wrapper">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <!-- Image column -->
+                        <div class="col-lg-5 d-none d-lg-flex">
+                            <img src="~/images/LoginCover.jpg"
+                                 alt="Login Visual"
+                                 class="w-100 rounded-start"
+                                 style="object-fit: cover; height: 100%;" />
+                        </div>
+
+                        <!-- Login Form column -->
+                        <div class="col-lg-7">
+                            <div class="card-body py-5 px-md-5">
+                                <h2 class="login-header mb-4 text-center">CONNEXION</h2>
+
+                                @if (ViewBag.Error != null)
+                                {
+                                    <div class="alert alert-danger text-center">@ViewBag.Error</div>
+                                }
+
+                                <form method="post" asp-action="Login">
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="email">Adresse Email</label>
+                                        <input type="email" name="email" id="email" class="form-control" required autocomplete="off" />
+                                    </div>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="password">Mot de passe</label>
+                                        <input type="password" name="password" id="password" class="form-control" required autocomplete="off" />
+                                    </div>
+
+                                    <!-- Remember me & Forgot password -->
+                                    <div class="row mb-4">
+                                        <div class="col d-flex justify-content-start">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="remember" name="remember" />
+                                                <label class="form-check-label" for="remember">Se souvenir de moi</label>
+                                            </div>
+                                        </div>
+                                        <div class="col text-end">
+                                            <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-maghreb w-100 mb-2">SE CONNECTER</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Particles.js script -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+<script>
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle", stroke: { width: 0, color: "#000000" } },
+            opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
+            size: { value: 3, random: true, anim: { enable: true, speed: 40, size_min: 0.1, sync: false } },
+            line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.2, width: 1 },
+            move: { enable: true, speed: 3, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: { enable: true, mode: "grab" },
+                onclick: { enable: true, mode: "push" },
+                resize: true
+            },
+            modes: {
+                grab: { distance: 140, line_linked: { opacity: 0.5 } },
+                push: { particles_nb: 4 }
+            }
+        },
+        retina_detect: true
+    });
+</script>

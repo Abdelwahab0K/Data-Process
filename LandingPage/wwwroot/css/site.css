@@ -1,0 +1,186 @@
+/* === Root Variables === */
+:root {
+    --primary-blue: #012B51;
+    --accent-yellow: #F3AD20;
+    --alert-red: #C9372F;
+    --neutral-gray: #f5f7fa;
+    --hover-blue: #0d4a7b;
+}
+
+/* === General Styling === */
+body {
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-yellow));
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* === Login Page === */
+.login-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-card {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+    .login-card h2 {
+        color: var(--primary-blue);
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+/* === Inputs and Buttons === */
+.form-control {
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 14px;
+    border: 2px solid var(--primary-blue);
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: var(--accent-yellow);
+        box-shadow: 0 0 6px var(--accent-yellow);
+    }
+
+.form-label {
+    color: var(--primary-blue);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-accent {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+    border: none;
+    padding: 14px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .btn-accent:hover {
+        background-color: var(--alert-red);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+/* === Dropdown Menu Styling === */
+.dropdown-menu {
+    background-color: var(--primary-blue);
+    border: 1px solid #ccc;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+    .dropdown-item:hover {
+        background-color: var(--accent-yellow);
+        color: black;
+    }
+
+/* === Dashboard Enhancements === */
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.table-warning {
+    animation: pulseRow 0.5s ease;
+}
+
+.table-info {
+    animation: pulseRow 0.5s ease-in-out;
+    background-color: #bee5eb !important;
+}
+
+/* === Table Animation === */
+@keyframes pulseRow {
+    0% {
+        background-color: #d1ecf1;
+    }
+
+    50% {
+        background-color: #bee5eb;
+    }
+
+    100% {
+        background-color: #d1ecf1;
+    }
+}
+
+/* === Page Fade-In Animation === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* === Canvas Chart Styling (KPI Page) === */
+.chart-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.chart-title {
+    color: var(--primary-blue);
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .login-card {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .chart-title {
+        font-size: 18px;
+    }
+
+    .form-control {
+        font-size: 15px;
+    }
+}

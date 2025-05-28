@@ -1,0 +1,741 @@
+﻿
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Industrial Filter Component</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --industrial-blue-dark: #1e3a58;
+            --industrial-blue: #2c5282;
+            --industrial-blue-light: #3182ce;
+            --industrial-orange: #f97316;
+            --industrial-orange-light: #fb923c;
+            --industrial-gray: #64748b;
+            --industrial-gray-light: #e2e8f0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-top: 10px; /* Reduced from 20px */
+        }
+
+        /* Compact Filter Bar */
+        .modern-filter-bar {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid var(--industrial-gray-light);
+            border-radius: 16px; /* Reduced from 20px */
+            padding: 15px 20px; /* Reduced from 25px 30px */
+            margin: 10px auto 20px; /* Reduced from 20px auto 40px */
+            max-width: 1200px; /* Reduced from 1400px */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.02); /* Reduced shadow */
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .page-title-modern {
+            color: var(--industrial-blue-dark);
+            font-size: 1.5rem; /* Reduced from 1.8rem */
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Reduced from 12px */
+        }
+
+        .title-icon {
+            background: linear-gradient(45deg, var(--industrial-blue), var(--industrial-blue-light));
+            color: white;
+            width: 36px; /* Reduced from 45px */
+            height: 36px; /* Reduced from 45px */
+            border-radius: 10px; /* Reduced from 12px */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(44, 82, 130, 0.25); /* Reduced shadow */
+            font-size: 1rem; /* Added to make icon smaller */
+        }
+
+        .filter-display-modern {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Reduced from 12px */
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            color: var(--industrial-gray);
+            font-weight: 600;
+            font-size: 0.8rem; /* Reduced from 0.9rem */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-badge-modern {
+            background: linear-gradient(45deg, var(--industrial-blue), var(--industrial-blue-light));
+            color: white;
+            padding: 6px 14px; /* Reduced from 10px 20px */
+            border-radius: 20px; /* Reduced from 25px */
+            font-size: 0.85rem; /* Reduced from 0.95rem */
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 3px 12px rgba(44, 82, 130, 0.2); /* Reduced shadow */
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Reduced from 8px */
+            transition: all 0.3s ease;
+        }
+
+            .filter-badge-modern:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(44, 82, 130, 0.3);
+            }
+
+        .action-buttons-modern {
+            display: flex;
+            gap: 6px; /* Reduced from 10px */
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modern {
+            padding: 8px 12px; /* Reduced from 10px 16px */
+            border-radius: 10px; /* Reduced from 12px */
+            font-weight: 600;
+            font-size: 0.85rem; /* Reduced from 0.9rem */
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            min-width: 36px; /* Added to maintain consistent button size */
+        }
+
+            .btn-modern::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.5s;
+            }
+
+            .btn-modern:hover::before {
+                left: 100%;
+            }
+
+            .btn-modern:hover {
+                transform: translateY(-1px); /* Reduced from -2px */
+            }
+
+        .btn-success-modern {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.25); /* Reduced shadow */
+        }
+
+        .btn-info-modern {
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 3px 12px rgba(59, 130, 246, 0.25); /* Reduced shadow */
+        }
+
+        .btn-primary-modern {
+            background: linear-gradient(45deg, var(--industrial-blue), var(--industrial-blue-light));
+            color: white;
+            box-shadow: 0 3px 12px rgba(44, 82, 130, 0.25); /* Reduced shadow */
+        }
+
+        .btn-orange-modern {
+            background: linear-gradient(45deg, var(--industrial-orange), var(--industrial-orange-light));
+            color: white;
+            box-shadow: 0 3px 12px rgba(249, 115, 22, 0.25); /* Reduced shadow */
+            padding: 8px 14px; /* Slightly more padding for the main button */
+        }
+
+        .separator-modern {
+            width: 1px; /* Reduced from 2px */
+            height: 24px; /* Reduced from 30px */
+            background: linear-gradient(to bottom, transparent, var(--industrial-gray-light), transparent);
+            margin: 0 6px; /* Reduced from 0 8px */
+        }
+
+        /* Modal Improvements */
+        .modal-content-modern {
+            border: none;
+            border-radius: 16px; /* Reduced from 20px */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12); /* Reduced shadow */
+            overflow: hidden;
+        }
+
+        .modal-header-modern {
+            background: linear-gradient(45deg, var(--industrial-blue-dark), var(--industrial-blue));
+            color: white;
+            padding: 20px 25px; /* Reduced from 25px 30px */
+            border: none;
+        }
+
+        .modal-title-modern {
+            font-size: 1.3rem; /* Reduced from 1.4rem */
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Reduced from 12px */
+        }
+
+        .nav-pills-modern .nav-link {
+            border-radius: 10px; /* Reduced from 12px */
+            font-weight: 600;
+            font-size: 0.8rem; /* Reduced from 0.85rem */
+            padding: 8px 12px; /* Reduced from 10px 16px */
+            margin: 0 2px; /* Reduced from 0 4px */
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+            .nav-pills-modern .nav-link.active {
+                background: linear-gradient(45deg, var(--industrial-orange), var(--industrial-orange-light));
+                color: white;
+                box-shadow: 0 3px 12px rgba(249, 115, 22, 0.25); /* Reduced shadow */
+            }
+
+            .nav-pills-modern .nav-link:not(.active) {
+                background: var(--industrial-gray-light);
+                color: var(--industrial-gray);
+            }
+
+            .nav-pills-modern .nav-link:hover:not(.active) {
+                background: #cbd5e1;
+                transform: translateY(-1px);
+            }
+
+        .form-control-modern {
+            border: 2px solid var(--industrial-gray-light);
+            border-radius: 10px; /* Reduced from 12px */
+            padding: 10px 14px; /* Reduced from 12px 16px */
+            font-size: 0.95rem; /* Reduced from 1rem */
+            transition: all 0.3s ease;
+        }
+
+            .form-control-modern:focus {
+                border-color: var(--industrial-blue-light);
+                box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+            }
+
+        .form-label-modern {
+            font-weight: 700;
+            color: var(--industrial-blue-dark);
+            margin-bottom: 6px; /* Reduced from 8px */
+            font-size: 0.9rem; /* Added to make labels smaller */
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .modern-filter-bar
+
+        {
+            padding: 12px 15px; /* Reduced from 20px */
+            margin: 8px 8px 15px; /* Reduced margins */
+        }
+
+        .page-title-modern {
+            font-size: 1.2rem; /* Reduced from 1.4rem */
+            justify-content: center;
+            margin-bottom: 10px; /* Reduced from 15px */
+        }
+
+        .filter-display-modern {
+            justify-content: center;
+            margin-bottom: 10px; /* Reduced from 15px */
+        }
+
+        .action-buttons-modern {
+            justify-content: center;
+        }
+
+        .separator-modern {
+            display: none;
+        }
+
+        .btn-modern {
+            padding: 6px 10px; /* Even smaller on mobile */
+            font-size: 0.8rem;
+        }
+
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 14px; /* Reduced from 16px */
+            height: 14px; /* Reduced from 16px */
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            to
+
+        {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        /* Hover Effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .hover-lift:hover {
+                transform: translateY(-1px); /* Reduced from -2px */
+            }
+
+        /* Compact content area */
+        .content-container {
+            margin-top: 15px; /* Reduced from default Bootstrap spacing */
+        }
+
+        .content-card {
+            border: none;
+            border-radius: 16px; /* Reduced from 20px */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06); /* Reduced shadow */
+            padding: 25px; /* Reduced from 40px */
+        }
+    </style>
+</head>
+<body>
+    <!-- Compact Filter Bar at Top -->
+    <div class="container-fluid">
+        <div class="modern-filter-bar">
+            <div class="row align-items-center g-2">
+                <!-- Reduced gap from g-3 to g-2 -->
+                <!-- Page Title -->
+                <div class="col-lg-4">
+                    <div class="page-title-modern">
+                        <div class="title-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        Analyse des Écarts
+                    </div>
+                </div>
+
+                <!-- Active Filter Display -->
+                <div class="col-lg-4">
+                    <div class="filter-display-modern justify-content-center">
+                        <span class="filter-label">Filtre:</span>
+                        <div class="filter-badge-modern hover-lift">
+                            <i class="bi bi-calendar-day"></i>
+                            <span id="currentFilterText">27/05/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-lg-4">
+                    <div class="action-buttons-modern justify-content-end">
+                        <button type="button" class="btn btn-modern btn-success-modern hover-lift"
+                                title="Télécharger Excel">
+                            <i class="bi bi-download"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-modern btn-info-modern hover-lift"
+                                title="Objectifs">
+                            <i class="bi bi-bar-chart"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-modern btn-primary-modern hover-lift"
+                                title="Actualiser" onclick="refreshData()">
+                            <i class="bi bi-arrow-clockwise" id="refreshIcon"></i>
+                        </button>
+
+                        <div class="separator-modern"></div>
+
+                        <button type="button" class="btn btn-modern btn-orange-modern hover-lift"
+                                data-bs-toggle="modal" data-bs-target="#filtreModal" title="Modifier le filtre">
+                            <i class="bi bi-funnel-fill me-1"></i>
+                            Modifier
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filtreModal" tabindex="-1" aria-labelledby="filtreModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-content-modern">
+                <div class="modal-header modal-header-modern">
+                    <h5 class="modal-title modal-title-modern" id="filtreModalLabel">
+                        <i class="bi bi-funnel"></i>
+                        Configuration des Filtres d'Analyse
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                    <ul class="nav nav-pills nav-pills-modern justify-content-center mb-4" id="pills-tab" role="tablist">
+                        @if (Model.VisibleFilters.Contains("pce_id"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="pce_id"?"active":"")"
+                                        id="pills-pce_id-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-pce_id"
+                                        type="button" role="tab">
+                                    <i class="bi bi-tag me-1"></i>PCE ID
+                                </button>
+                            </li>
+                        }
+                        @if (Model.VisibleFilters.Contains("jour"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="jour"?"active":"")"
+                                        id="pills-jour-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-jour"
+                                        type="button" role="tab">
+                                    <i class="bi bi-calendar-day me-1"></i>Jour
+                                </button>
+                            </li>
+                        }
+                        @if (Model.VisibleFilters.Contains("semaine"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="semaine"?"active":"")"
+                                        id="pills-semaine-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-semaine"
+                                        type="button" role="tab">
+                                    <i class="bi bi-calendar-week me-1"></i>Semaine
+                                </button>
+                            </li>
+                        }
+                        @if (Model.VisibleFilters.Contains("mois"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="mois"?"active":"")"
+                                        id="pills-mois-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-mois"
+                                        type="button" role="tab">
+                                    <i class="bi bi-calendar-month me-1"></i>Mois
+                                </button>
+                            </li>
+                        }
+                        @if (Model.VisibleFilters.Contains("annee"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="annee"?"active":"")"
+                                        id="pills-annee-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-annee"
+                                        type="button" role="tab">
+                                    <i class="bi bi-calendar me-1"></i>Année
+                                </button>
+                            </li>
+                        }
+                        @if (Model.VisibleFilters.Contains("periode"))
+                        {
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link @(Model.TypeFiltre=="periode"?"active":"")"
+                                        id="pills-periode-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#pills-periode"
+                                        type="button" role="tab">
+                                    <i class="bi bi-calendar-range me-1"></i>Période
+                                </button>
+                            </li>
+                        }
+                    </ul>
+
+
+                    <!-- Tabs Content -->
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-pce_id">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">PCE ID :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control form-control-modern" type="text"
+                                           placeholder="Entrez le PCE ID" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-annee">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Année :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="selectAnnee" class="form-control form-control-modern">
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- In your Razor view, replace this section: -->
+                        <div class="tab-pane fade show active" id="pills-jour">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Jour :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control form-control-modern" type="date"
+                                           value="@Model.Jour" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-semaine">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Semaine :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control form-control-modern" type="week" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-mois">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Mois :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="selectMois" name="mois" class="form-control form-control-modern">
+                                        <option value="1">Janvier</option>
+                                        <option value="2">Février</option>
+                                        <option value="3">Mars</option>
+                                        <option value="4">Avril</option>
+                                        <option value="5">Mai</option>
+                                        <option value="6">Juin</option>
+                                        <option value="7">Juillet</option>
+                                        <option value="8">Août</option>
+                                        <option value="9">Septembre</option>
+                                        <option value="10">Octobre</option>
+                                        <option value="11">Novembre</option>
+                                        <option value="12">Décembre</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Année :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="selectMoisAnnee" name="moisAnnee" class="form-control form-control-modern">
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-periode">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Du :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control form-control-modern" type="date"
+                                           name="txtPeriodeDu"
+                                           value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label form-label-modern">Au :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control form-control-modern" type="date"
+                                           name="txtPeriodeAu"
+                                           value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 25px 30px; border-top: 2px solid var(--industrial-gray-light);">
+                    <button type="button" class="btn btn-modern btn-primary-modern hover-lift" onclick="applyFilter()">
+                        <span class="loading-spinner d-none" id="loadingSpinner"></span>
+                        <i class="bi bi-check-circle me-2" id="applyIcon"></i>
+                        Appliquer le Filtre
+                    </button>
+                    <button type="button" class="btn btn-secondary hover-lift" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-2"></i>
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="container mt-4">
+        <div class="card" style="border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
+            <div class="card-body" style="padding: 40px;">
+                <h2 style="color: var(--industrial-blue-dark); font-weight: 700;">Données d'Analyse</h2>
+                <p style="color: var(--industrial-gray);">Votre contenu d'analyse apparaîtra ici en fonction des filtres sélectionnés.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Enhanced JavaScript functionality
+        function refreshData() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.style.animation = 'spin 1s ease-in-out infinite';
+
+            // Simulate refresh
+            setTimeout(() => {
+                refreshIcon.style.animation = '';
+                console.log('Data refreshed');
+            }, 1000);
+        }
+
+                       function applyFilter() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const applyIcon = document.getElementById('applyIcon');
+
+            // Show loading state
+            loadingSpinner.classList.remove('d-none');
+            applyIcon.classList.add('d-none');
+
+            const activeTab = document.querySelector('#pills-tab .nav-link.active');
+            const filterType = activeTab.getAttribute('data-bs-target').replace('#pills-', '');
+
+            setTimeout(() => {
+                loadingSpinner.classList.add('d-none');
+                applyIcon.classList.remove('d-none');
+
+                // Update filter display
+                updateFilterDisplay(filterType);
+
+                // Update content
+                document.querySelector('.card-body').innerHTML = `
+                    <h2 style="color: var(--industrial-blue-dark); font-weight: 700;">Données filtrées : ${filterType}</h2>
+                    <p style="color: var(--industrial-gray);">Contenu mis à jour pour le filtre <strong>${filterType}</strong>.</p>
+                `;
+
+                // ✅ Safely close the modal
+                const modalElement = document.getElementById('filtreModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+
+                // ✅ Remove backdrop manually if necessary
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style = ''; // Clear any leftover styles
+
+            }, 1000);
+        }
+
+
+                    function updateFilterDisplay(filterType) {
+                const filterText = document.getElementById('currentFilterText');
+
+                switch (filterType) {
+                    case 'pce_id':
+                        const pceId = document.querySelector('#pills-pce_id input')?.value || 'Non défini';
+                        filterText.textContent = `PCE ID: ${pceId}`;
+                        break;
+
+                    case 'jour':
+                        const jour = document.querySelector('#pills-jour input')?.value;
+                        filterText.textContent = jour ? new Date(jour).toLocaleDateString('fr-FR') : 'Non défini';
+                        break;
+
+                    case 'semaine':
+                        const semaine = document.querySelector('#pills-semaine input')?.value;
+                        filterText.textContent = semaine ? `Semaine ${semaine}` : 'Non définie';
+                        break;
+
+                        case 'mois':
+                        const moisSelect = document.getElementById('selectMois');
+                        const anneeSelect = document.getElementById('selectMoisAnnee');
+
+
+
+        const moisValue = moisSelect?.value;
+        const moisText = moisSelect?.options[moisSelect.selectedIndex]?.text;
+        const anneeValue = anneeSelect?.value;
+
+        filterText.textContent = (moisText && anneeValue) ? `${moisText} ${anneeValue}` : 'Non défini';
+        break;
+
+
+                    case 'annee':
+                        const annee = document.querySelector('#pills-annee select')?.value;
+                        filterText.textContent = annee || 'Non définie';
+                        break;
+
+                    case 'periode':
+                        const periodeDu = document.querySelector('#pills-periode input[type="date"]:nth-of-type(1)')?.value;
+                        const periodeAu = document.querySelector('#pills-periode input[type="date"]:nth-of-type(2)')?.value;
+                        if (periodeDu && periodeAu) {
+                            filterText.textContent = `${new Date(periodeDu).toLocaleDateString('fr-FR')} - ${new Date(periodeAu).toLocaleDateString('fr-FR')}`;
+                        } else {
+                            filterText.textContent = 'Non définie';
+                        }
+                        break;
+
+                    default:
+                        filterText.textContent = 'Filtre par défaut';
+                }
+        }
+
+
+
+
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Add smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate filter bar on load
+            const filterBar = document.querySelector('.modern-filter-bar');
+            filterBar.style.opacity = '0';
+            filterBar.style.transform = 'translateY(-20px)';
+
+            setTimeout(() => {
+                filterBar.style.transition = 'all 0.6s ease';
+                filterBar.style.opacity = '1';
+                filterBar.style.transform = 'translateY(0)';
+          
+        
+
+            }, 100);
+        });
+    </script>
+</body>
+</html>
