@@ -26,6 +26,21 @@ This is a dashboard project developed for Maghreb Steel using ASP.NET MVC.
 3. Configure your DB in `appsettings.json`  
 4. Press `F5` or run the project
 
+   
+🔹 1. Page de Connexion (/Home/Login)
+Utilité : permet à l’utilisateur de se connecter avec ses identifiants sécurisés.
+
+Fonctionnalités :
+
+Vérification des identifiants.
+
+Redirection vers le dashboard après connexion réussie.
+
+Capture d’écran :
+
+
+
+
 ## Author
 
 - [AbdelwahabOK](https://github.com/AbdelwahabOK)
