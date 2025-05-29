@@ -1,5 +1,3 @@
-![image](https://github.com/user-attachments/assets/aba9276c-d985-48d0-8af4-bb8f101d561a)# LandingPage (ASP.NET MVC)
-
 This is a dashboard project developed for Maghreb Steel using ASP.NET MVC.
 
 ## Features
